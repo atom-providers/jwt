@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/atom-providers/log v0.0.0-20230801024233-a65b67115343
 	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/rogeecn/atom v1.0.4
+	github.com/rogeecn/atom v1.0.6
 	golang.org/x/sync v0.3.0
 )
 
