@@ -18,8 +18,9 @@ const (
 )
 
 type BaseClaims struct {
-	UID  uint64 `json:"uid,omitempty"`
-	Role uint64 `json:"role,omitempty"`
+	UserID   int64  `json:"user_id,omitempty"`
+	TenantID int64  `json:"tenant_id,omitempty"`
+	Role     string `json:"role,omitempty"`
 }
 
 // Custom claims structure
@@ -28,7 +29,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-const TOKEN_PREFIX = "Bearer "
+const TokenPrefix = "Bearer "
 
 type JWT struct {
 	singleflight *singleflight.Group
@@ -49,6 +50,10 @@ func Provide(opts ...opt.Option) error {
 	if err := o.UnmarshalConfig(&config); err != nil {
 		return err
 	}
+	if config.ExpiresTime == "" {
+		config.ExpiresTime = "168h"
+	}
+
 	return container.Container.Provide(func() (*JWT, error) {
 		return &JWT{
 			config:     &config,
@@ -58,7 +63,7 @@ func Provide(opts ...opt.Option) error {
 }
 
 func (j *JWT) CreateClaims(baseClaims BaseClaims) *Claims {
-	ep, _ := time.ParseDuration(j.config.ExpiresTime)
+	ep := j.config.ExpiresTimeDuration()
 	claims := Claims{
 		BaseClaims: baseClaims,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -86,7 +91,7 @@ func (j *JWT) CreateTokenByOldToken(oldToken string, claims *Claims) (string, er
 
 // 解析 token
 func (j *JWT) ParseToken(tokenString string) (*Claims, error) {
-	tokenString = strings.TrimPrefix(tokenString, TOKEN_PREFIX)
+	tokenString = strings.TrimPrefix(tokenString, TokenPrefix)
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
