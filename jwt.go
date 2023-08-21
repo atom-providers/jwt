@@ -17,16 +17,7 @@ const (
 	HttpHeader = "Authorization"
 )
 
-type BaseClaims struct {
-	UserID   int64 `json:"user_id,omitempty"`
-	TenantID int64 `json:"tenant_id,omitempty"`
-}
-
 // Custom claims structure
-type Claims struct {
-	BaseClaims
-	jwt.RegisteredClaims
-}
 
 const TokenPrefix = "Bearer "
 
