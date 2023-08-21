@@ -6,7 +6,6 @@ require (
 	github.com/atom-providers/log v0.0.0-20230801024233-a65b67115343
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/rogeecn/atom v1.0.6
-	github.com/samber/lo v1.38.1
 	golang.org/x/sync v0.3.0
 )
 
@@ -26,7 +25,6 @@ require (
 	go.uber.org/dig v1.17.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
