@@ -9,36 +9,17 @@ import (
 	"github.com/rogeecn/atom/utils/opt"
 
 	jwt "github.com/golang-jwt/jwt/v4"
-	"github.com/samber/lo"
 	"golang.org/x/sync/singleflight"
 )
 
 const (
-	CtxKey     = "claims"
+	CtxKey     = "__jwtClaims{}"
 	HttpHeader = "Authorization"
 )
 
 type BaseClaims struct {
 	UserID   int64 `json:"user_id,omitempty"`
 	TenantID int64 `json:"tenant_id,omitempty"`
-	Role     Role  `json:"role,omitempty"`
-}
-
-func (c BaseClaims) IsSuperAdmin() bool {
-	return c.Role == RoleSuperAdmin
-}
-
-func (c BaseClaims) IsAdmin() bool {
-	adminRoles := []Role{RoleSuperAdmin, RoleAdmin, RoleTenantAdmin}
-	return lo.Contains(adminRoles, c.Role)
-}
-
-func (c BaseClaims) IsTenantAdmin() bool {
-	return c.Role == RoleTenantAdmin
-}
-
-func (c BaseClaims) IsUser() bool {
-	return c.Role == RoleUser
 }
 
 // Custom claims structure
@@ -80,14 +61,19 @@ func Provide(opts ...opt.Option) error {
 	}, o.DiOptions()...)
 }
 
+func (j *JWT) WithExpireTime(expire string) *JWT {
+	j.config.ExpiresTime = expire
+	return j
+}
+
 func (j *JWT) CreateClaims(baseClaims BaseClaims) *Claims {
 	ep := j.config.ExpiresTimeDuration()
 	claims := Claims{
 		BaseClaims: baseClaims,
 		RegisteredClaims: jwt.RegisteredClaims{
-			NotBefore: jwt.NewNumericDate(time.Now().Add(-time.Second * 10)), // 签名生效时间
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(ep)),                // 过期时间 7天  配置文件
-			Issuer:    j.config.Issuer,                                       // 签名的发行者
+			NotBefore: jwt.NewNumericDate(time.Now().Add(-time.Minute)), // 签名生效时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(ep)),           // 过期时间 7天  配置文件
+			Issuer:    j.config.Issuer,                                  // 签名的发行者
 		},
 	}
 	return &claims
