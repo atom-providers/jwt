@@ -16,7 +16,7 @@ type Claims struct {
 }
 
 func (claim *Claims) IsAdmin() bool {
-	return claim.Role == RoleSysAdmin.String() || claim.Role == RoleSuperAdmin.String()
+	return claim.Role == RoleSystemAdmin.String() || claim.Role == RoleSuperAdmin.String()
 }
 
 func (claim *Claims) IsTenantAdmin() bool {
