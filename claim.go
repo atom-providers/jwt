@@ -7,6 +7,7 @@ import (
 type BaseClaims struct {
 	UserID   uint64 `json:"user_id,omitempty"`
 	TenantID uint64 `json:"tenant_id,omitempty"`
+	RoleID   uint64 `json:"role_id,omitempty"`
 	Role     string `json:"role,omitempty"`
 }
 
