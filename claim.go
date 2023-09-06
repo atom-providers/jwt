@@ -16,6 +16,10 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
+func (claim *Claims) IsSuperAdmin() bool {
+	return claim.Role == RoleSuperAdmin.String()
+}
+
 func (claim *Claims) IsAdmin() bool {
 	return claim.Role == RoleSystemAdmin.String() || claim.Role == RoleSuperAdmin.String()
 }
