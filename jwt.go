@@ -62,9 +62,9 @@ func (j *JWT) CreateClaims(baseClaims BaseClaims) *Claims {
 	claims := Claims{
 		BaseClaims: baseClaims,
 		RegisteredClaims: jwt.RegisteredClaims{
-			NotBefore: jwt.NewNumericDate(time.Now().Add(-time.Minute)), // 签名生效时间
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(ep)),           // 过期时间 7天  配置文件
-			Issuer:    j.config.Issuer,                                  // 签名的发行者
+			NotBefore: jwt.NewNumericDate(time.Now().Add(-5 * time.Minute)), // 签名生效时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(ep)),               // 过期时间 7天  配置文件
+			Issuer:    j.config.Issuer,                                      // 签名的发行者
 		},
 	}
 	return &claims
